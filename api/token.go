@@ -1,4 +1,4 @@
-package ci
+package api
 
 import (
 	"encoding/json"

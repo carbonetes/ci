@@ -1,4 +1,4 @@
-package ci
+package api
 
 type TokenCheckResponse struct {
 	Expired     bool `json:"expired"`
