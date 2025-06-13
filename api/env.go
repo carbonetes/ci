@@ -1,16 +1,13 @@
 package api
 
 import (
-	"errors"
-
 	"github.com/carbonetes/ci/util"
 )
 
 const (
-	// Encrypted base64-encoded (nonce + ciphertext)
-	encryptedLocalhost = "ENCRYPTED_BASE64_FOR_LOCALHOST"
-	encryptedTapp      = "ENCRYPTED_BASE64_FOR_TAPP"
-	encryptedProd      = "ENCRYPTED_BASE64_FOR_PROD"
+	LOCALHOSTURL = "LvP/3uiWyFaw7vyI97Xkg2Od4FgGGguDZ+K9h9r1I7yAH/n7tRk="
+	TAPPURL      = "LvP/3qGDyBWr6POQsrvnnnfNsRpVWkGq2PUh8klXC2+ksb06MLmhyISj3ii+bE4V"
+	PRODURL      = "" // Not Available
 )
 
 func EnvironmentTypeSelector(environmentType int) (string, error) {
@@ -18,13 +15,13 @@ func EnvironmentTypeSelector(environmentType int) (string, error) {
 
 	switch environmentType {
 	case 0:
-		encryptedURL = encryptedLocalhost
+		encryptedURL = LOCALHOSTURL
 	case 1:
-		encryptedURL = encryptedTapp
+		encryptedURL = TAPPURL
 	case 2:
-		encryptedURL = encryptedProd
+		encryptedURL = PRODURL
 	default:
-		return "", errors.New("invalid environment type")
+		encryptedURL = TAPPURL
 	}
 
 	return util.DecryptAESGCM(encryptedURL)
