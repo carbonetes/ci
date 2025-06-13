@@ -3,6 +3,7 @@ package ci
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/carbonetes/ci/util"
@@ -20,16 +21,29 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 		os.Exit(1)
 	}
 
+	// Payload
 	payload := map[string]string{
 		"token":      token,
 		"pluginType": pluginType,
 	}
 
+	// Perform HTTP POST request
 	resp, body := apiRequest(payload, fmt.Sprintf("%s/personal-access-token/is-expired", url))
+	// ---------------
 
+	if resp.StatusCode != 200 {
+		var appError ApplicationErrorResponse
+		if err := json.Unmarshal(body, &appError); err != nil {
+			log.Fatal("Failed to parse response:", err)
+			os.Exit(1)
+		}
+		log.Print("Error: ", appError.Message)
+		os.Exit(1)
+	}
+	// Unmarshal the body into the struct
 	var result TokenCheckResponse
 	if err := json.Unmarshal(body, &result); err != nil {
-		fmt.Println("Failed to parse response:", err)
+		log.Fatal("Failed to parse response:", err)
 		os.Exit(1)
 	}
 
@@ -38,28 +52,21 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 			for _, lp := range p.Permissions {
 				if lp == "write" {
 					permitted = true
-					break
 				}
 			}
 		}
 	}
 
 	if !permitted {
-		fmt.Println("Status Code:", 401)
-		fmt.Println("Error: You do not have pipeline write permission.")
-		os.Exit(1)
-	}
-
-	if resp.StatusCode != 200 {
-		fmt.Println("Status Code:", resp.StatusCode)
-		fmt.Println("Response Body:", string(body))
+		log.Fatal("Error: You do not have pipeline write permission.")
 		os.Exit(1)
 	}
 
 	tokenId = result.PersonalAccessTokenId
-	if tokenId == "" {
-		fmt.Println("Status Code:", resp.StatusCode)
-		fmt.Println("Error: Unable to fetch token id.")
+	if result.PersonalAccessTokenId == "" {
+		log.Fatal("Status Code:", resp.StatusCode)
+		log.Fatal("Error: Unable to fetch token id.")
 		os.Exit(1)
 	}
+
 }

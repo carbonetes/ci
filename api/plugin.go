@@ -11,13 +11,15 @@ import (
 )
 
 // SavePluginRepository submits SBOM and metadata to Carbonetes API.
-func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start time.Time, environmentType int) {
+func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start time.Time, environmentType int, analysisType int) {
 
 	url, err := util.EnvironmentTypeSelector(environmentType)
 	if err != nil {
 		fmt.Println("Failed to parse response:", err)
 		os.Exit(1)
 	}
+
+	analysis := util.AnalysisTypeSelector(analysisType)
 
 	var bomJSONString string
 	if bom != nil {
@@ -37,7 +39,7 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 		"duration":              fmt.Sprintf("%.2f", time.Since(start).Seconds()),
 	}
 
-	resp, body := apiRequest(payload, fmt.Sprintf("%s/integrations/vuln/plugin/save", url))
+	resp, body := apiRequest(payload, fmt.Sprintf("%s/integrations/"+analysis+"/plugin/save", url))
 
 	var result PluginRepo
 	if err := json.Unmarshal(body, &result); err != nil {
