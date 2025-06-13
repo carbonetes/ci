@@ -39,7 +39,7 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 		"duration":              fmt.Sprintf("%.2f", time.Since(start).Seconds()),
 	}
 
-	resp, body := apiRequest(payload, fmt.Sprintf("%s/integrations/"+analysis+"/plugin/save", url))
+	resp, body := apiRequest(payload, fmt.Sprintf("%sintegrations/"+analysis+"/plugin/save", url))
 
 	var result PluginRepo
 	if err := json.Unmarshal(body, &result); err != nil {

@@ -28,7 +28,7 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 	}
 
 	// Perform HTTP POST request
-	resp, body := apiRequest(payload, fmt.Sprintf("%s/personal-access-token/is-expired", url))
+	resp, body := apiRequest(payload, fmt.Sprintf("%spersonal-access-token/is-expired", url))
 	// ---------------
 
 	if resp.StatusCode != 200 {
