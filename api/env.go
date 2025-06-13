@@ -1,13 +1,18 @@
 package api
 
-const (
-	// Encrypted URLs (base64-encoded AES-GCM ciphertext)
-	encryptedLocalhost = "ENCRYPTED_BASE64_STRING_FOR_LOCALHOST"
-	encryptedTapp      = "ENCRYPTED_BASE64_STRING_FOR_TAPP"
-	encryptedProd      = "ENCRYPTED_BASE64_STRING_FOR_PROD"
+import (
+	"errors"
+
+	"github.com/carbonetes/ci/util"
 )
 
-// EnvironmentTypeSelector returns the decrypted URL based on the type
+const (
+	// Encrypted base64-encoded (nonce + ciphertext)
+	encryptedLocalhost = "ENCRYPTED_BASE64_FOR_LOCALHOST"
+	encryptedTapp      = "ENCRYPTED_BASE64_FOR_TAPP"
+	encryptedProd      = "ENCRYPTED_BASE64_FOR_PROD"
+)
+
 func EnvironmentTypeSelector(environmentType int) (string, error) {
 	var encryptedURL string
 
@@ -19,13 +24,8 @@ func EnvironmentTypeSelector(environmentType int) (string, error) {
 	case 2:
 		encryptedURL = encryptedProd
 	default:
-		encryptedURL = encryptedTapp
+		return "", errors.New("invalid environment type")
 	}
 
-	decryptedURL, err := util.decryptAESGCM(encryptedURL)
-	if err != nil {
-		return "", err
-	}
-
-	return decryptedURL, nil
+	return util.DecryptAESGCM(encryptedURL)
 }
