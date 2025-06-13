@@ -7,10 +7,18 @@ import (
 	"time"
 
 	"github.com/CycloneDX/cyclonedx-go"
+	"github.com/carbonetes/ci/util"
 )
 
 // SavePluginRepository submits SBOM and metadata to Carbonetes API.
-func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start time.Time) {
+func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start time.Time, environmentType int) {
+
+	url, err := util.EnvironmentTypeSelector(environmentType)
+	if err != nil {
+		fmt.Println("Failed to parse response:", err)
+		os.Exit(1)
+	}
+
 	var bomJSONString string
 	if bom != nil {
 		bomBytes, err := json.Marshal(bom)
@@ -29,7 +37,7 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 		"duration":              fmt.Sprintf("%.2f", time.Since(start).Seconds()),
 	}
 
-	resp, body := apiRequest(payload, "saveURL")
+	resp, body := apiRequest(payload, fmt.Sprintf("%s/integrations/vuln/plugin/save", url))
 
 	var result PluginRepo
 	if err := json.Unmarshal(body, &result); err != nil {

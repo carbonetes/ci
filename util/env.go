@@ -1,8 +1,4 @@
-package api
-
-import (
-	"github.com/carbonetes/ci/util"
-)
+package util
 
 const (
 	LOCALHOSTURL = "LvP/3uiWyFaw7vyI97Xkg2Od4FgGGguDZ+K9h9r1I7yAH/n7tRk="
@@ -24,5 +20,5 @@ func EnvironmentTypeSelector(environmentType int) (string, error) {
 		encryptedURL = TAPPURL
 	}
 
-	return util.DecryptAESGCM(encryptedURL)
+	return DecryptAESGCM(encryptedURL)
 }

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/carbonetes/ci/util"
 )
 
 var tokenId = "0"
@@ -11,12 +13,19 @@ var permitted = false
 
 // PersonalAccessToken checks token permissions and sets global token ID.
 func PersonalAccessToken(token, pluginType string, environmentType int) {
+
+	url, err := util.EnvironmentTypeSelector(environmentType)
+	if err != nil {
+		fmt.Println("Failed to parse response:", err)
+		os.Exit(1)
+	}
+
 	payload := map[string]string{
 		"token":      token,
 		"pluginType": pluginType,
 	}
 
-	resp, body := apiRequest(payload, "tokenURL")
+	resp, body := apiRequest(payload, fmt.Sprintf("%s/personal-access-token/is-expired", url))
 
 	var result TokenCheckResponse
 	if err := json.Unmarshal(body, &result); err != nil {
