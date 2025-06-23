@@ -21,21 +21,20 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 
 	analysis := util.AnalysisTypeSelector(analysisType)
 
-	var bomJSONString string
+	var bomBytes []byte
 	if bom != nil {
-		bomBytes, err := json.Marshal(bom)
+		bomBytes, err = json.Marshal(bom)
 		if err != nil {
 			fmt.Println("Failed to marshal BOM:", err)
 			os.Exit(1)
 		}
-		bomJSONString = string(bomBytes)
 	}
 
 	payload := map[string]interface{}{
 		"repoName":              repoName,
 		"personalAccessTokenId": tokenId,
 		"pluginName":            pluginName,
-		"bom":                   bomJSONString,
+		"bom":                   bomBytes,
 		"duration":              fmt.Sprintf("%.2f", time.Since(start).Seconds()),
 	}
 
