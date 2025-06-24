@@ -8,10 +8,11 @@ import (
 
 	"github.com/CycloneDX/cyclonedx-go"
 	"github.com/carbonetes/ci/util"
+	"github.com/carbonetes/diggity/pkg/types"
 )
 
 // SavePluginRepository submits SBOM and metadata to Carbonetes API.
-func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start time.Time, environmentType int, analysisType int) {
+func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start time.Time, environmentType int, analysisType int, secrets []types.Secret) {
 
 	url, err := util.EnvironmentTypeSelector(environmentType)
 	if err != nil {
@@ -29,12 +30,21 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 			os.Exit(1)
 		}
 	}
+	var secretBytes []byte
+	if len(secrets) > 0 {
+		secretBytes, err = json.Marshal(secrets)
+		if err != nil {
+			fmt.Println("Failed to marshal BOM:", err)
+			os.Exit(1)
+		}
+	}
 
 	payload := map[string]interface{}{
 		"repoName":              repoName,
 		"personalAccessTokenId": tokenId,
 		"pluginName":            pluginName,
 		"bom":                   bomBytes,
+		"secrets":               secretBytes,
 		"duration":              fmt.Sprintf("%.2f", time.Since(start).Seconds()),
 	}
 
