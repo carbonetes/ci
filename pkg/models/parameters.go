@@ -1,5 +1,10 @@
 package models
 
+import (
+	diggity "github.com/carbonetes/diggity/pkg/types"
+	jacked "github.com/carbonetes/jacked/pkg/types"
+)
+
 type Parameters struct {
 	// # ANALYZER PARAMETERS
 	Analyzer string `json:"analyzer"`
@@ -11,4 +16,8 @@ type Parameters struct {
 	// # GENERAL PARAMETERS
 	FailCriteria string `json:"fail_criteria"`
 	SkipFail     bool   `json:"skip_fail"`
+
+	// # DIGGITY & JACKED PARAMETERS
+	Diggity diggity.Parameters `json:"diggity,omitempty"`
+	Jacked  jacked.Parameters  `json:"jacked,omitempty"`
 }
