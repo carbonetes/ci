@@ -11,7 +11,7 @@ func init() {
 	// # GENERAL
 	root.Flags().BoolP("version", "v", false, "Print the version of Carbonetes CI")
 
-	// # JACKED & DIGGITY
+	// # ANALYZER
 	root.Flags().StringP("analyzer", "", "", "Analyzer type (jacked or diggity)")
 	root.Flags().StringP("scan-type", "", "", fmt.Sprintf("Supported scan types (%s)", strings.Join(constants.SUPPORTED_SCAN_TYPES[:], ", ")))
 	root.Flags().StringP("input", "i", "", "Input to be scanned (e.g., image name, filesystem path, tarball path)")
