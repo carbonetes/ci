@@ -11,8 +11,10 @@ func init() {
 	// # GENERAL
 	root.Flags().BoolP("version", "v", false, "Print the version of Carbonetes CI")
 
-	// # ANALYZER
+	// # JACKED & DIGGITY
 	root.Flags().StringP("analyzer", "", "", "Analyzer type (jacked or diggity)")
+	root.Flags().StringP("scan-type", "", "", fmt.Sprintf("Supported scan types (%s)", strings.Join(constants.SUPPORTED_SCAN_TYPES[:], ", ")))
+	root.Flags().StringP("input", "i", "", "Input to be scanned (e.g., image name, filesystem path, tarball path)")
 	// # API
 	root.Flags().StringP("token", "", "", "Personal Access Token for authentication")
 	root.Flags().StringP("plugin-type", "", "", fmt.Sprintf("Supported Plugin types for CI/CD (%s)", strings.Join(constants.SUPPORTED_CICD_PLUGINS[:], ", ")))

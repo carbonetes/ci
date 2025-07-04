@@ -13,3 +13,6 @@ var SUPPORTED_CICD_PLUGINS = [...]string{"jenkins", "azure", "bitbucket"}
 
 // FAIL CRITERIA SEVERITIES
 var FAIL_CRITERIA_SEVERITIES = [...]string{"critical", "high", "medium", "low", "negligible", "unknown"}
+
+// SUPPORTED SCAN TYPES
+var SUPPORTED_SCAN_TYPES = [...]string{"image", "filesystem", "tarball"}

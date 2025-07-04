@@ -22,10 +22,13 @@ func rootCmd(c *cobra.Command, args []string) {
 	versionArg, _ := c.Flags().GetBool("version")
 	if versionArg {
 		log.Print(build.GetBuild().Version)
+		return
 	}
 
 	// Retrieve flags
 	analyzer, _ := c.Flags().GetString("analyzer")
+	scanType, _ := c.Flags().GetString("scan-type")
+	input, _ := c.Flags().GetString("input")
 	token, _ := c.Flags().GetString("token")
 	pluginType, _ := c.Flags().GetString("plugin-type")
 	failCriteria, _ := c.Flags().GetString("fail-criteria")
@@ -55,6 +58,19 @@ func rootCmd(c *cobra.Command, args []string) {
 			log.Fatalf("%v: Invalid analyzer type %s", constants.CI_FAILURE, analyzer)
 			os.Exit(1)
 		}
+	}
+
+	// ### SCAN TYPE FLAG
+	if len(scanType) == 0 && !helper.Contains(constants.SUPPORTED_SCAN_TYPES[:], scanType) {
+		log.Fatalf("%v: Invalid scan type %s. Supported types are: %v", constants.CI_FAILURE, scanType, constants.SUPPORTED_SCAN_TYPES)
+		os.Exit(1)
+
+	}
+
+	// ### INPUT FLAG
+	if len(input) == 0 {
+		_ = c.Help()
+		os.Exit(0)
 	}
 
 	// ## API TAGS: TOKEN & PLUGIN TYPE FLAGS
