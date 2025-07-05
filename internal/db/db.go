@@ -1,0 +1,3 @@
+package db
+
+// TODO: DB UPDATE FIRST BEFORE SCANNING
