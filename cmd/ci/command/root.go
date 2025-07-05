@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/carbonetes/ci/cmd/ci/build"
+	"github.com/carbonetes/ci/cmd/ci/oss"
 	"github.com/carbonetes/ci/internal/constants"
 	"github.com/carbonetes/ci/internal/helper"
 	"github.com/carbonetes/ci/internal/log"
@@ -123,6 +124,6 @@ func rootCmd(c *cobra.Command, args []string) {
 		},
 	}
 
-	analyze(parameters)
+	oss.Run(parameters)
 
 }

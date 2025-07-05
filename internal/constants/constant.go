@@ -6,6 +6,11 @@ const (
 	CI_WARNING = "#CI-WARNING: "
 	DIGGITY    = "diggity"
 	JACKED     = "jacked"
+
+	// SCAN TYPES
+	IMAGE       = "image"
+	FILE_SYSTEM = "filesystem"
+	TARBALL     = "tarball"
 )
 
 // SUPPORTED CI/CD PLUGINS

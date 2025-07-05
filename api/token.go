@@ -3,8 +3,9 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
+
+	"github.com/carbonetes/ci/internal/log"
 
 	"github.com/carbonetes/ci/util"
 )
