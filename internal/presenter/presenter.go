@@ -75,7 +75,6 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 
 		tbl.Print()
 		log.Printf("Analysis completed in %.3f seconds", duration)
-		break
 	case constants.DIGGITY:
 		if bom == nil || bom.Components == nil {
 			log.Printf("No components found in BOM")
@@ -105,6 +104,5 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 
 		tbl.Print()
 		log.Printf("Analysis completed in %.3f seconds", duration)
-		break
 	}
 }
