@@ -35,6 +35,10 @@ func rootCmd(c *cobra.Command, args []string) {
 	skipFail, _ := c.Flags().GetBool("skip-fail")
 
 	// # INPUT CHECKING
+	if len(input) == 0 {
+		c.Help()
+		return
+	}
 
 	// ## SKIP FAIL FLAG
 	if skipFail {

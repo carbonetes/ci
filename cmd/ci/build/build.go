@@ -18,7 +18,7 @@ const placeholder string = "not available"
 
 // Variable has been set as "not available" as Default Value. Values provided as Built-Time Arguments.
 var (
-	application string = "jacked"
+	application string = "Carbonetes CI"
 	version     string = placeholder
 	buildDate   string = placeholder
 	gitCommit   string = placeholder
@@ -32,7 +32,7 @@ var (
 func GetBuild() Build {
 	return Build{
 		Application: application, // Application Name
-		Version:     version,     // Jacked Version
+		Version:     version,     // Version
 		BuildDate:   buildDate,   // Date of the build
 		GitCommit:   gitCommit,   // git SHA at build-time
 		GitDesc:     gitDesc,     // output of 'git describe --dirty --always --tags'

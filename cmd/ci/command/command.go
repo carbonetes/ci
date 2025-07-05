@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/carbonetes/ci/internal/constants"
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -22,6 +23,10 @@ func init() {
 	root.Flags().StringP("fail-criteria", "", "", fmt.Sprintf("Set the minimum severity level for failing the build based on vulnerability analysis results (build fails if vulnerabilities of this severity or higher are found). Choose Severity:(%s)", strings.Join(constants.FAIL_CRITERIA_SEVERITIES[:], ", ")))
 	// # SKIP FAIL
 	root.Flags().BoolP("skip-fail", "", false, "Skip failing the build even if vulnerabilities, secrets, or any input error are found during the analysis")
+	// # HELP
+	root.PersistentFlags().BoolP("help", "h", false, "")
+	root.PersistentFlags().Lookup("help").Hidden = true
+	root.SetHelpCommand(&cobra.Command{Hidden: true})
 }
 
 func Run() error {
