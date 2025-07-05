@@ -71,11 +71,12 @@ func Analyze(parameters types.Parameters) *cyclonedx.BOM {
 
 	// # Vulnerability: Jacked Analysis
 
-	// End Duration
-	elapsed := time.Since(start).Seconds()
 	if parameters.Analyzer == constants.JACKED {
+		start = time.Now()
 		jacked.Analyze(bom)
 	}
+	// End Duration
+	elapsed := time.Since(start).Seconds()
 	presenter.DisplayOutput(parameters, elapsed, bom)
 	return bom
 }
