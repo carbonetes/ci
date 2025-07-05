@@ -11,15 +11,17 @@ import (
 )
 
 func DisplayInput(parameters types.Parameters) {
-	log.Printf("Analyzer: %s", parameters.Analyzer)
-	log.Printf("Input: %s", parameters.Input)
-	log.Printf("Scan Type: %s", parameters.ScanType)
-	log.Printf("Plugin Type: %s", parameters.PluginType)
+	log.Println("========================================")
+	log.Println("         Analysis Started")
+	log.Println("========================================")
+	log.Printf("  Analyzer    : %s", parameters.Analyzer)
+	log.Printf("  Input       : %s", parameters.Input)
+	log.Printf("  Scan Type   : %s", parameters.ScanType)
+	log.Printf("  Plugin Type : %s", parameters.PluginType)
 	if parameters.Analyzer == constants.JACKED {
-		log.Printf("Fail Criteria: %s", parameters.FailCriteria)
+		log.Printf("  Fail Criteria: %s", parameters.FailCriteria)
 	}
-
-	log.Printf("Analysis started with the following parameters:")
+	log.Println("========================================")
 }
 func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM) {
 	switch parameters.Analyzer {
