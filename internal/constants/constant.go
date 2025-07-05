@@ -16,3 +16,6 @@ var FAIL_CRITERIA_SEVERITIES = [...]string{"critical", "high", "medium", "low", 
 
 // SUPPORTED SCAN TYPES
 var SUPPORTED_SCAN_TYPES = [...]string{"image", "filesystem", "tarball"}
+
+// SUPPORTED ANALYZERS
+var SUPPORTED_ANALYZERS = [...]string{JACKED, DIGGITY}

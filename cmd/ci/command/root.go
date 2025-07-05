@@ -7,7 +7,11 @@ import (
 	"github.com/carbonetes/ci/internal/constants"
 	"github.com/carbonetes/ci/internal/helper"
 	"github.com/carbonetes/ci/internal/log"
+	"github.com/carbonetes/ci/pkg/types"
 	"github.com/spf13/cobra"
+
+	diggity "github.com/carbonetes/diggity/pkg/types"
+	jacked "github.com/carbonetes/jacked/pkg/types"
 )
 
 var root = &cobra.Command{
@@ -59,9 +63,12 @@ func rootCmd(c *cobra.Command, args []string) {
 				os.Exit(1)
 			}
 		default:
-			log.Fatalf("%v: Invalid analyzer type %s", constants.CI_FAILURE, analyzer)
+			log.Fatalf("%v: No analyzer type %s. Use --analyzer flag to provide an analyzer type. Choose: %v", constants.CI_FAILURE, analyzer, constants.SUPPORTED_ANALYZERS)
 			os.Exit(1)
 		}
+	} else {
+		log.Fatalf("%v: No analyzer type %s. Use --analyzer flag to provide an analyzer type. Choose: %v", constants.CI_FAILURE, analyzer, constants.SUPPORTED_ANALYZERS)
+		os.Exit(1)
 	}
 
 	// ### SCAN TYPE FLAG
@@ -96,5 +103,26 @@ func rootCmd(c *cobra.Command, args []string) {
 		log.Fatalf("%v: Invalid fail criteria %s. Supported criteria are: %v", constants.CI_FAILURE, failCriteria, constants.FAIL_CRITERIA_SEVERITIES)
 		os.Exit(1)
 	}
+
+	// # SET PARAMETERS
+	parameters := types.Parameters{
+		Analyzer:     analyzer,
+		ScanType:     scanType,
+		Input:        input,
+		Token:        token,
+		PluginType:   pluginType,
+		FailCriteria: failCriteria,
+		SkipFail:     skipFail,
+
+		Diggity: diggity.Parameters{
+			OutputFormat: diggity.JSON,
+		},
+
+		Jacked: jacked.Parameters{
+			Format: jacked.JSON,
+		},
+	}
+
+	analyze(parameters)
 
 }

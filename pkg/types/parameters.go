@@ -1,4 +1,4 @@
-package models
+package types
 
 import (
 	diggity "github.com/carbonetes/diggity/pkg/types"
