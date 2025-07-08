@@ -72,6 +72,7 @@ func Analyze(parameters types.Parameters) *cyclonedx.BOM {
 	// # Vulnerability: Jacked Analysis
 
 	if parameters.Analyzer == constants.JACKED {
+		jacked.DBRun(parameters.ForceDbUpdate)
 		start = time.Now()
 		jacked.Analyze(bom)
 	}

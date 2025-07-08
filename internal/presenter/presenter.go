@@ -14,12 +14,14 @@ func DisplayInput(parameters types.Parameters) {
 	log.Println("========================================")
 	log.Println("         Analysis Started")
 	log.Println("========================================")
-	log.Printf("  Analyzer    : %s", parameters.Analyzer)
-	log.Printf("  Input       : %s", parameters.Input)
-	log.Printf("  Scan Type   : %s", parameters.ScanType)
-	log.Printf("  Plugin Type : %s", parameters.PluginType)
+	log.Printf("         Analyzer : %s", parameters.Analyzer)
+	log.Printf("            Input : %s", parameters.Input)
+	log.Printf("        Scan Type : %s", parameters.ScanType)
+	log.Printf("      Plugin Type : %s", parameters.PluginType)
+	log.Printf("        Skip Fail : %v", parameters.SkipFail)
 	if parameters.Analyzer == constants.JACKED {
-		log.Printf("  Fail Criteria: %s", parameters.FailCriteria)
+		log.Printf("    Fail Criteria : %s", parameters.FailCriteria)
+		log.Printf("  Force DB Update : %v", parameters.ForceDbUpdate)
 	}
 	log.Println("========================================")
 }

@@ -38,6 +38,7 @@ func rootCmd(c *cobra.Command, args []string) {
 	pluginType, _ := c.Flags().GetString("plugin-type")
 	failCriteria, _ := c.Flags().GetString("fail-criteria")
 	skipFail, _ := c.Flags().GetBool("skip-fail")
+	forceDbUpdate, _ := c.Flags().GetBool("force-db-update")
 
 	// # INPUT CHECKING
 	if len(input) == 0 {
@@ -107,13 +108,14 @@ func rootCmd(c *cobra.Command, args []string) {
 
 	// # SET PARAMETERS
 	parameters := types.Parameters{
-		Analyzer:     analyzer,
-		ScanType:     scanType,
-		Input:        input,
-		Token:        token,
-		PluginType:   pluginType,
-		FailCriteria: failCriteria,
-		SkipFail:     skipFail,
+		Analyzer:      analyzer,
+		ScanType:      scanType,
+		Input:         input,
+		Token:         token,
+		PluginType:    pluginType,
+		FailCriteria:  failCriteria,
+		SkipFail:      skipFail,
+		ForceDbUpdate: forceDbUpdate,
 
 		Diggity: diggity.Parameters{
 			OutputFormat: diggity.JSON,

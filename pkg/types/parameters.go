@@ -14,8 +14,9 @@ type Parameters struct {
 	Token      string `json:"token"`
 	PluginType string `json:"plugin_type"`
 	// # GENERAL PARAMETERS
-	FailCriteria string `json:"fail_criteria"`
-	SkipFail     bool   `json:"skip_fail"`
+	FailCriteria  string `json:"fail_criteria"`
+	SkipFail      bool   `json:"skip_fail"`
+	ForceDbUpdate bool   `json:"force_db_update"`
 
 	// # DIGGITY & JACKED PARAMETERS
 	Diggity diggity.Parameters `json:"diggity,omitempty"`
