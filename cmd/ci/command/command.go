@@ -15,7 +15,7 @@ func init() {
 	// # ANALYZER
 	root.Flags().StringP("analyzer", "", "", "Analyzer type (jacked or diggity)")
 	root.Flags().StringP("scan-type", "", "", fmt.Sprintf("Supported scan types (%s)", strings.Join(constants.SUPPORTED_SCAN_TYPES[:], ", ")))
-	root.Flags().StringP("input", "i", "", "Input to be scanned (e.g., image name, filesystem path, tarball path)")
+	root.Flags().StringP("input", "i", "", "Input to be scanned (e.g., image name:tag, filesystem path, tarball path)")
 	// # API
 	root.Flags().StringP("token", "", "", "Personal Access Token for authentication")
 	root.Flags().StringP("plugin-type", "", "", fmt.Sprintf("Supported Plugin types for CI/CD (%s)", strings.Join(constants.SUPPORTED_CICD_PLUGINS[:], ", ")))
