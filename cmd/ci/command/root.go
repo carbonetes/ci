@@ -8,6 +8,7 @@ import (
 	"github.com/carbonetes/ci/internal/constants"
 	"github.com/carbonetes/ci/internal/helper"
 	"github.com/carbonetes/ci/internal/log"
+	"github.com/carbonetes/ci/internal/presenter"
 	"github.com/carbonetes/ci/pkg/types"
 	"github.com/spf13/cobra"
 
@@ -48,7 +49,7 @@ func rootCmd(c *cobra.Command, args []string) {
 
 	// ## SKIP FAIL FLAG
 	if skipFail {
-		log.Warnf("%v Skip fail is ENABLED!.", constants.CI_WARNING)
+		presenter.DisplaySkipFail()
 	}
 
 	// ## JACKED & DIGGITY FLAGS

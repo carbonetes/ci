@@ -78,9 +78,7 @@ func Analyze(parameters types.Parameters) *cyclonedx.BOM {
 	}
 	// End Duration
 	elapsed := time.Since(start).Seconds()
-	presenter.DisplayOutput(parameters, elapsed, bom)
-	log.Println("========================================")
-	log.Println(constants.CI_SUCCESS, "Analysis completed!")
-	log.Println("========================================")
+	run := presenter.DisplayAnalysisOutput(parameters, elapsed, bom)
+	presenter.DisplayAssesstmentOutput(run, parameters)
 	return bom
 }

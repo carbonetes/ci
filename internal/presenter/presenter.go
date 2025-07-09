@@ -1,11 +1,13 @@
 package presenter
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/CycloneDX/cyclonedx-go"
 	"github.com/carbonetes/ci/cmd/ci/ui/table"
 	"github.com/carbonetes/ci/internal/constants"
+	"github.com/carbonetes/ci/internal/helper"
 	"github.com/carbonetes/ci/internal/log"
 	"github.com/carbonetes/ci/pkg/types"
 )
@@ -18,20 +20,22 @@ func DisplayInput(parameters types.Parameters) {
 	log.Printf("            Input : %s", parameters.Input)
 	log.Printf("        Scan Type : %s", parameters.ScanType)
 	log.Printf("      Plugin Type : %s", parameters.PluginType)
-	log.Printf("        Skip Fail : %v", parameters.SkipFail)
+	log.Printf("        Skip Fail : %v", displaySkipFailonInput(parameters.SkipFail))
 	if parameters.Analyzer == constants.JACKED {
 		log.Printf("    Fail Criteria : %s", parameters.FailCriteria)
 		log.Printf("  Force DB Update : %v", parameters.ForceDbUpdate)
 	}
 	log.Println("========================================")
+	log.Println()
 }
-func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM) {
+
+func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM) bool {
 	switch parameters.Analyzer {
 	case constants.JACKED:
 		if bom == nil || bom.Vulnerabilities == nil || bom.Components == nil {
 			log.Printf("No vulnerabilities")
 			log.Printf("Analysis completed in %.3f seconds", duration)
-			return
+			return true
 		}
 
 		tbl := table.NewTable()
@@ -42,6 +46,9 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 		for _, c := range *bom.Components {
 			componentsMap[c.BOMRef] = c.Name + ":" + c.Version
 		}
+
+		// Count vulnerabilities that match the fail criteria
+		failCriteriaCount := 0
 
 		for _, v := range *bom.Vulnerabilities {
 			component, ok := componentsMap[v.BOMRef]
@@ -57,14 +64,16 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 			} else if len(parts) == 2 {
 				version = parts[1]
 			}
-
 			severity := "UNKNOWN"
+			displaySeverity := severity
 			if v.Ratings != nil && len(*v.Ratings) > 0 {
 				for _, r := range *v.Ratings {
 					if r.Severity != "" {
-						severity = string(r.Severity)
-						if severity == parameters.FailCriteria {
-							severity = string(r.Severity + "<-")
+						severity = strings.ToLower(string(r.Severity))
+						displaySeverity = severity
+						if helper.FailCriteriaSeverityMatchesFilter(severity, parameters.FailCriteria) {
+							displaySeverity = string(r.Severity) + "[!]"
+							failCriteriaCount++
 						}
 						break
 					}
@@ -76,19 +85,25 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 				v.ID,
 				version,
 				v.Recommendation,
-				severity,
+				displaySeverity,
 			)
 		}
 
 		tbl.Print()
-		log.Printf("Vulnerabilities: %d", len(*bom.Vulnerabilities))
-		log.Printf("Analysis completed in %.3f seconds", duration)
-		return
+		log.Println()
+		log.Println("========================================")
+		log.Println("         Analysis Result")
+		log.Println("========================================")
+		log.Printf("       Vulnerabilities : %d", len(*bom.Vulnerabilities))
+		log.Printf("Failure Criteria Found : %d", failCriteriaCount)
+		log.Printf("              Duration : %.3f seconds", duration)
+		log.Println("========================================")
+		return failCriteriaCount == 0
 	case constants.DIGGITY:
 		if bom == nil || bom.Components == nil || len(*bom.Components) == 0 {
 			log.Printf("No Packages Found")
-			log.Printf("Analysis completed in %.3f seconds", duration)
-			return
+			log.Printf("Duration: %.3f seconds", duration)
+			return true
 		}
 
 		tbl := table.NewTable()
@@ -112,8 +127,42 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 		}
 
 		tbl.Print()
-		log.Printf("Packages: %d", len(*bom.Components))
-		log.Printf("Analysis completed in %.3f seconds", duration)
-		return
+		log.Println()
+		log.Println("========================================")
+		log.Println("         Analysis Result")
+		log.Println("========================================")
+		log.Printf("Secrets Found : %d", 0) // # TODO: Implement secrets found
+		log.Printf("     Packages : %d", len(*bom.Components))
+		log.Printf("     Duration : %.3f seconds", duration)
+		log.Println("========================================")
+		return true
 	}
+	return true
+}
+
+func DisplayAssesstmentOutput(run bool, parameters types.Parameters) {
+	if parameters.SkipFail {
+		// Skip Fail == True Always return CI_SUCCESS
+		DisplaySkipFail()
+		run = true
+	}
+	log.Println()
+	log.Println("========================================")
+	if !run {
+		log.Println(constants.CI_FAILURE, "Analysis completed with failure!")
+	} else {
+		log.Println(constants.CI_SUCCESS, "Analysis completed!")
+	}
+	log.Println("========================================")
+}
+
+func DisplaySkipFail() {
+	log.Warnf("%v Skip fail is ENABLED!", constants.CI_WARNING)
+}
+
+func displaySkipFailonInput(skipFail bool) string {
+	if skipFail {
+		return fmt.Sprintf("%t [WARNING]", skipFail)
+	}
+	return fmt.Sprintf("%t", skipFail)
 }
