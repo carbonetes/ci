@@ -2,17 +2,17 @@ package jacked
 
 import (
 	"github.com/CycloneDX/cyclonedx-go"
-	"github.com/carbonetes/ci/internal/db"
 	"github.com/carbonetes/jacked/pkg/analyzer"
+	jackedDB "github.com/carbonetes/jacked/pkg/db"
 )
 
 func Analyze(bom *cyclonedx.BOM) {
 
-	analyzer.AnalyzeCDX(bom)
+	analyzer.Analyze(bom)
 }
 
 func DBRun(forceDbUpdate bool) {
 
-	db.DBCheck(false, forceDbUpdate)
-	db.Load()
+	jackedDB.Check(forceDbUpdate)
+	jackedDB.Load()
 }

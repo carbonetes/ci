@@ -29,13 +29,13 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 	switch parameters.Analyzer {
 	case constants.JACKED:
 		if bom == nil || bom.Vulnerabilities == nil || bom.Components == nil {
-			log.Printf("No vulnerabilities found in BOM")
+			log.Printf("No vulnerabilities")
 			log.Printf("Analysis completed in %.3f seconds", duration)
 			return
 		}
 
 		tbl := table.NewTable()
-		tbl.SetHeaders("Component", "Version", "CVE", "Severity", "Recommendation")
+		tbl.SetHeaders("Component", "CVE", "Version", "Recommendation", "Severity")
 
 		// Build a map of BOMRef to component name:version
 		componentsMap := make(map[string]string)
@@ -63,6 +63,9 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 				for _, r := range *v.Ratings {
 					if r.Severity != "" {
 						severity = string(r.Severity)
+						if severity == parameters.FailCriteria {
+							severity = string(r.Severity + "<-")
+						}
 						break
 					}
 				}
@@ -70,18 +73,20 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 
 			tbl.AddRow(
 				name,
-				version,
 				v.ID,
-				severity,
+				version,
 				v.Recommendation,
+				severity,
 			)
 		}
 
 		tbl.Print()
+		log.Printf("Vulnerabilities: %d", len(*bom.Vulnerabilities))
 		log.Printf("Analysis completed in %.3f seconds", duration)
+		return
 	case constants.DIGGITY:
-		if bom == nil || bom.Components == nil {
-			log.Printf("No components found in BOM")
+		if bom == nil || bom.Components == nil || len(*bom.Components) == 0 {
+			log.Printf("No Packages Found")
 			log.Printf("Analysis completed in %.3f seconds", duration)
 			return
 		}
@@ -107,6 +112,8 @@ func DisplayOutput(parameters types.Parameters, duration float64, bom *cyclonedx
 		}
 
 		tbl.Print()
+		log.Printf("Packages: %d", len(*bom.Components))
 		log.Printf("Analysis completed in %.3f seconds", duration)
+		return
 	}
 }
