@@ -10,6 +10,7 @@ import (
 	"github.com/carbonetes/ci/internal/helper"
 	"github.com/carbonetes/ci/internal/log"
 	"github.com/carbonetes/ci/pkg/types"
+	diggityTypes "github.com/carbonetes/diggity/pkg/types"
 )
 
 func DisplayInput(parameters types.Parameters) {
@@ -29,7 +30,7 @@ func DisplayInput(parameters types.Parameters) {
 	log.Println()
 }
 
-func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM) bool {
+func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM, secrets []diggityTypes.Secret) bool {
 	switch parameters.Analyzer {
 	case constants.JACKED:
 		if bom == nil || bom.Vulnerabilities == nil || bom.Components == nil {
@@ -131,7 +132,7 @@ func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *c
 		log.Println("========================================")
 		log.Println("         Analysis Result")
 		log.Println("========================================")
-		log.Printf("Secrets Found : %d", 0) // # TODO: Implement secrets found
+		log.Printf("Secrets Found : %d", len(secrets))
 		log.Printf("     Packages : %d", len(*bom.Components))
 		log.Printf("     Duration : %.3f seconds", duration)
 		log.Println("========================================")

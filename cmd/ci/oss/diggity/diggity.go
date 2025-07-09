@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/CycloneDX/cyclonedx-go"
+	"github.com/carbonetes/ci/cmd/ci/oss/diggity/secrets"
 	"github.com/carbonetes/ci/cmd/ci/oss/jacked"
 	"github.com/carbonetes/ci/internal/log"
 	"github.com/carbonetes/ci/internal/presenter"
@@ -69,8 +70,10 @@ func Analyze(parameters types.Parameters) *cyclonedx.BOM {
 	// # SBOM: Diggity Analysis Result
 	bom = cdx.Finalize(addr)
 
-	// # Vulnerability: Jacked Analysis
+	// # Secrets: Diggity Secrets Analysis Result
+	secrets := secrets.Analyze()
 
+	// # Vulnerability: Jacked Analysis
 	if parameters.Analyzer == constants.JACKED {
 		jacked.DBRun(parameters.ForceDbUpdate)
 		start = time.Now()
@@ -78,7 +81,7 @@ func Analyze(parameters types.Parameters) *cyclonedx.BOM {
 	}
 	// End Duration
 	elapsed := time.Since(start).Seconds()
-	run := presenter.DisplayAnalysisOutput(parameters, elapsed, bom)
+	run := presenter.DisplayAnalysisOutput(parameters, elapsed, bom, secrets)
 	presenter.DisplayAssesstmentOutput(run, parameters)
 	return bom
 }
