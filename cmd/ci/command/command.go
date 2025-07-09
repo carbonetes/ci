@@ -22,7 +22,7 @@ func init() {
 	// # FAIL CRITERIA
 	root.Flags().StringP("fail-criteria", "", "", fmt.Sprintf("Set the minimum severity level for failing the build based on vulnerability analysis results (build fails if vulnerabilities of this severity or higher are found). Choose Severity:(%s)", strings.Join(constants.FAIL_CRITERIA_SEVERITIES[:], ", ")))
 	// # SKIP FAIL
-	root.Flags().BoolP("skip-fail", "", false, "Skip failing the build even if vulnerabilities, secrets, or any input error are found during the analysis")
+	root.Flags().BoolP("skip-fail", "", false, "Skip failing the build even if any failure criteria or secrets are found.")
 	// # FORCE DB UPDATE
 	root.Flags().BoolP("force-db-update", "", false, "Force update of the database even if it is already up to date. This will re-download the database files and update the local database.")
 	// # HELP
