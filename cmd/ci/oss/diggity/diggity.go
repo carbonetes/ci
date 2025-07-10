@@ -46,7 +46,7 @@ func Analyze(parameters types.Parameters) (*cyclonedx.BOM, []diggity.Secret) {
 			os.Exit(1)
 		}
 	case 2: // TARBALL
-		tarball, err := reader.ReadTarball(parameters.Diggity.Input)
+		tarball, err := reader.ReadTarball(parameters.Input)
 		if err != nil {
 			log.Fatalf("%v: Error reading tarball '%s': %v", constants.CI_FAILURE, parameters.Input, err)
 			os.Exit(1)
