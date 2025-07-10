@@ -45,8 +45,8 @@ func rootCmd(c *cobra.Command, args []string) {
 
 	// # INPUT CHECKING
 	if len(input) == 0 {
-		c.Help()
-		return
+		log.Fatalf("%v: No input provided. Use --input flag to provide an input.", constants.CI_FAILURE)
+		os.Exit(1)
 	}
 
 	// ## SKIP FAIL FLAG
@@ -87,12 +87,6 @@ func rootCmd(c *cobra.Command, args []string) {
 	if len(scanType) == 0 && !helper.Contains(constants.SUPPORTED_SCAN_TYPES[:], scanType) {
 		log.Fatalf("%v: Invalid scan type %s. Supported types are: %v", constants.CI_FAILURE, scanType, constants.SUPPORTED_SCAN_TYPES)
 		os.Exit(1)
-	}
-
-	// # INPUT FLAG
-	if len(input) == 0 {
-		_ = c.Help()
-		os.Exit(0)
 	}
 
 	// # API TAGS: TOKEN & PLUGIN TYPE FLAGS
