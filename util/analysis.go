@@ -31,9 +31,9 @@ func GetAnalysisType(analyzer string) (analysisType int) {
 
 	switch analyzer {
 	case "diggity":
-		analysisType = 1
+		analysisType = 0
 	case "jacked":
-		analysisType = 2
+		analysisType = 1
 	default:
 		log.Fatalf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, analysisType, constants.SUPPORTED_ANALYZERS)
 		os.Exit(1)
