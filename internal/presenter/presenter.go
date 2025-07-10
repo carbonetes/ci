@@ -132,10 +132,17 @@ func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *c
 		log.Println("========================================")
 		log.Println("         Analysis Result")
 		log.Println("========================================")
-		log.Printf("Secrets Found : %d", len(secrets))
+		if len(secrets) > 0 {
+			log.Printf("      Secrets : %d [!]", len(secrets))
+		} else {
+			log.Printf("      Secrets : %d", len(secrets))
+		}
 		log.Printf("     Packages : %d", len(*bom.Components))
 		log.Printf("     Duration : %.3f seconds", duration)
 		log.Println("========================================")
+		if len(secrets) > 0 {
+			return false
+		}
 		return true
 	}
 	return true
