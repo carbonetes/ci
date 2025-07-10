@@ -1,5 +1,12 @@
 package util
 
+import (
+	"os"
+
+	"github.com/carbonetes/ci/internal/constants"
+	"github.com/carbonetes/ci/internal/log"
+)
+
 const (
 	BOM  = "bom"
 	VULN = "vuln"
@@ -18,4 +25,18 @@ func AnalysisTypeSelector(analysisType int) string {
 	}
 
 	return analysisTypeStr
+}
+
+func GetAnalysisType(analyzer string) (analysisType int) {
+
+	switch analyzer {
+	case "diggity":
+		analysisType = 1
+	case "jacked":
+		analysisType = 2
+	default:
+		log.Fatalf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, analysisType, constants.SUPPORTED_ANALYZERS)
+		os.Exit(1)
+	}
+	return analysisType
 }
