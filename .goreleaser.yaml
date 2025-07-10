@@ -33,7 +33,7 @@ builds:
         -X github.com/carbonetes/ci/cmd/ci/build.gitDesc={{.Summary}}
 
   - id: darwin-builds
-    binary: ci
+    binary: carbonetes-ci
     dir: cmd/ci
     goos:
       - darwin
