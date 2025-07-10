@@ -7,6 +7,7 @@ import (
 
 	"github.com/carbonetes/ci/internal/log"
 
+	"github.com/carbonetes/ci/internal/constants"
 	"github.com/carbonetes/ci/util"
 )
 
@@ -18,7 +19,7 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 
 	url, err := util.EnvironmentTypeSelector(environmentType)
 	if err != nil {
-		fmt.Println("Failed to parse response:", err)
+		log.Fatalf("%v: EnvironmentTypeSelector Error. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
@@ -35,16 +36,16 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 	if resp.StatusCode != 200 {
 		var appError ApplicationErrorResponse
 		if err := json.Unmarshal(body, &appError); err != nil {
-			log.Fatal("Failed to parse response:", err)
+			log.Fatalf("%v: Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
 			os.Exit(1)
 		}
-		log.Print("Error: ", appError.Message)
+		log.Fatalf("%v: %v", constants.CI_FAILURE, appError.Message)
 		os.Exit(1)
 	}
 	// Unmarshal the body into the struct
 	var result TokenCheckResponse
 	if err := json.Unmarshal(body, &result); err != nil {
-		log.Fatal("Failed to parse response:", err)
+		log.Fatalf("%v: Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
@@ -59,14 +60,13 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 	}
 
 	if !permitted {
-		log.Fatal("Error: You do not have pipeline write permission.")
+		log.Fatalf("%v: Token does not have PIPELINE Write Permission.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
 	tokenId = result.PersonalAccessTokenId
 	if result.PersonalAccessTokenId == "" {
-		log.Fatal("Status Code:", resp.StatusCode)
-		log.Fatal("Error: Unable to fetch token id.")
+		log.Fatalf("%v: Something went wrong from getting token details. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
