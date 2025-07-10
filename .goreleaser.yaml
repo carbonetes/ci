@@ -1,0 +1,111 @@
+version: 2
+
+project_name: carbonetes-ci
+release:
+  github:
+    owner: carbonetes
+    name: ci
+  name_template: '{{.Tag}}'
+
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  - id: linux-builds
+    binary: carbonetes-ci
+    dir: cmd/ci
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+      - ppc64le
+    env:
+      - CGO_ENABLED=0
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    ldflags:
+      - |
+        -X github.com/carbonetes/ci/cmd/ci/build.version={{.Version}}
+        -X github.com/carbonetes/ci/cmd/ci/build.buildDate={{.Date}}
+        -X github.com/carbonetes/ci/cmd/ci/build.gitCommit={{.Commit}}
+        -X github.com/carbonetes/ci/cmd/ci/build.gitDesc={{.Summary}}
+
+  - id: darwin-builds
+    binary: ci
+    dir: cmd/ci
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - |
+        -X github.com/carbonetes/ci/cmd/ci/build.version={{.Version}}
+        -X github.com/carbonetes/ci/cmd/ci/build.buildDate={{.Date}}
+        -X github.com/carbonetes/ci/cmd/ci/build.gitCommit={{.Commit}}
+        -X github.com/carbonetes/ci/cmd/ci/build.gitDesc={{.Summary}}
+
+  - id: windows-build
+    binary: carbonetes-ci
+    dir: cmd/ci
+    goos:
+      - windows
+    goarch:
+      - amd64
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - |
+        -X github.com/carbonetes/ci/cmd/ci/build.version={{.Version}}
+        -X github.com/carbonetes/ci/cmd/ci/build.buildDate={{.Date}}
+        -X github.com/carbonetes/ci/cmd/ci/build.gitCommit={{.Commit}}
+        -X github.com/carbonetes/ci/cmd/ci/build.gitDesc={{.Summary}}
+
+archives:
+  - id: tar-archives
+    builds:
+      - linux-builds
+      - darwin-builds
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format: tar.gz
+    files:
+      - src: LICENSE
+      - src: README.md
+
+  - id: zip-archives
+    builds:
+      - windows-build
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format: zip
+    files:
+      - src: LICENSE
+      - src: README.md
+
+checksum:
+  name_template: '{{.ProjectName}}_{{.Version}}_checksums.txt'
+  algorithm: sha256
+
+
+changelog:
+  sort: asc
+  abbrev: -1
+  groups:
+  - title: Features
+    regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+    order: 0
+  - title: 'Bug Fixes'
+    regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+    order: 1
+  - title: Others
+    regexp: '^.*?(refactor|chore|docs|test|style)(\([[:word:]]+\))??!?:.+$'
+    order: 999
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
