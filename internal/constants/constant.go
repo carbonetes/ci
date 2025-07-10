@@ -24,3 +24,6 @@ var SUPPORTED_SCAN_TYPES = [...]string{"image", "filesystem", "tarball"}
 
 // SUPPORTED ANALYZERS
 var SUPPORTED_ANALYZERS = [...]string{JACKED, DIGGITY}
+
+// SUPPORTED ENVIRONMENT TYPE
+var SUPPORTED_ENVIRONMENT_TYPE = [...]string{"localhost", "test", "production"}

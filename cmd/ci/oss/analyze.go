@@ -3,6 +3,7 @@ package oss
 import (
 	"os"
 
+	"github.com/carbonetes/ci/api"
 	"github.com/carbonetes/ci/cmd/ci/oss/diggity"
 	"github.com/carbonetes/ci/internal/constants"
 	"github.com/carbonetes/ci/internal/helper"
@@ -12,6 +13,9 @@ import (
 )
 
 func Run(parameters types.Parameters) {
+
+	// Start Personal Access Token Validation
+	api.PersonalAccessToken(parameters.Token, parameters.PluginType, parameters.EnvType)
 
 	switch parameters.ScanType {
 	// FILE SYSTEM / DIRECTORY
@@ -43,5 +47,8 @@ func Run(parameters types.Parameters) {
 
 	presenter.DisplayInput(parameters)
 
-	diggity.Analyze(parameters)
+	bom, secrets := diggity.Analyze(parameters)
+
+	// # Save Analysis Result
+	api.SavePluginRepository(bom, parameters.Input, parameters.PluginType, parameters.Duration, parameters.EnvType, parameters.AnalysisType, secrets)
 }

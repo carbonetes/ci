@@ -17,7 +17,7 @@ import (
 	diggity "github.com/carbonetes/diggity/pkg/types"
 )
 
-func Analyze(parameters types.Parameters) *cyclonedx.BOM {
+func Analyze(parameters types.Parameters) (*cyclonedx.BOM, []diggity.Secret) {
 
 	var bom *cyclonedx.BOM
 	// Start Duration
@@ -81,7 +81,10 @@ func Analyze(parameters types.Parameters) *cyclonedx.BOM {
 	}
 	// End Duration
 	elapsed := time.Since(start).Seconds()
+	parameters.Duration = time.Now().Add(-time.Duration(elapsed * float64(time.Second)))
+
+	// Display Output
 	run := presenter.DisplayAnalysisOutput(parameters, elapsed, bom, secrets)
 	presenter.DisplayAssesstmentOutput(run, parameters)
-	return bom
+	return bom, secrets
 }

@@ -25,6 +25,9 @@ func init() {
 	root.Flags().BoolP("skip-fail", "", false, "Skip failing the build even if any failure criteria or secrets are found.")
 	// # FORCE DB UPDATE
 	root.Flags().BoolP("force-db-update", "", false, "Force update of the database even if it is already up to date. This will re-download the database files and update the local database.")
+	// # ENVIRONMENT TYPE
+	root.Flags().StringP("environment-type", "", "", fmt.Sprintf("Supported environment types (%s)", strings.Join(constants.SUPPORTED_ENVIRONMENT_TYPE[:], ", ")))
+
 	// # HELP
 	root.PersistentFlags().BoolP("help", "h", false, "")
 	root.PersistentFlags().Lookup("help").Hidden = true
