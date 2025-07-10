@@ -7,13 +7,7 @@ toolchain go1.23.4
 require (
 	github.com/CycloneDX/cyclonedx-go v0.9.2
 	github.com/alexeyco/simpletable v1.0.0
-	github.com/google/uuid v1.6.0
-	github.com/schollz/progressbar/v3 v3.18.0
-	github.com/uptrace/bun v1.2.1
-	github.com/uptrace/bun/dialect/sqlitedialect v1.2.1
-	github.com/uptrace/bun/driver/sqliteshim v1.2.1
 	gopkg.in/yaml.v2 v2.4.0
-	modernc.org/sqlite v1.30.1
 )
 
 require (
@@ -50,6 +44,7 @@ require (
 	github.com/golistic/urn v0.0.0-20230504070933-711e86b5b7cb // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-containerregistry v0.20.2 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-version v1.7.0 // indirect
@@ -66,7 +61,6 @@ require (
 	github.com/mattn/go-localereader v0.0.2-0.20220822084749-2491eb6c1c75 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
-	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -84,6 +78,9 @@ require (
 	github.com/saferwall/pe v1.5.6 // indirect
 	github.com/secDre4mer/pkcs7 v0.0.0-20240322103146-665324a4461d // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
+	github.com/uptrace/bun v1.2.1 // indirect
+	github.com/uptrace/bun/dialect/sqlitedialect v1.2.1 // indirect
+	github.com/uptrace/bun/driver/sqliteshim v1.2.1 // indirect
 	github.com/vbatts/tar-split v0.11.3 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
@@ -92,13 +89,13 @@ require (
 	golang.org/x/mod v0.22.0 // indirect
 	golang.org/x/net v0.36.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/term v0.29.0 // indirect
 	golang.org/x/tools v0.29.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
 	modernc.org/gc/v3 v3.0.0-20240304020402-f0dba7c97c2b // indirect
 	modernc.org/libc v1.52.1 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
+	modernc.org/sqlite v1.30.1 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
