@@ -35,73 +35,74 @@ func DisplayInput(parameters types.Parameters) {
 func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM, secrets []diggityTypes.Secret) bool {
 	switch parameters.Analyzer {
 	case constants.JACKED:
-		if bom == nil || bom.Vulnerabilities == nil || len(*bom.Components) == 0 || bom.Components == nil {
+		if bom == nil || bom.Components == nil || len(*bom.Vulnerabilities) == 0 {
 			log.Printf("No vulnerabilities")
 			log.Printf("Analysis completed in %.3f seconds", duration)
 			return true
-		}
+		} else {
 
-		tbl := table.NewTable()
-		tbl.SetHeaders("Component", "CVE", "Version", "Recommendation", "Severity")
+			tbl := table.NewTable()
+			tbl.SetHeaders("Component", "CVE", "Version", "Recommendation", "Severity")
 
-		// Build a map of BOMRef to component name:version
-		componentsMap := make(map[string]string)
-		for _, c := range *bom.Components {
-			componentsMap[c.BOMRef] = c.Name + ":" + c.Version
-		}
-
-		// Count vulnerabilities that match the fail criteria
-		failCriteriaCount := 0
-
-		for _, v := range *bom.Vulnerabilities {
-			component, ok := componentsMap[v.BOMRef]
-			if !ok {
-				log.Printf("Component not found for vulnerability: %s", v.BOMRef)
-				continue
+			// Build a map of BOMRef to component name:version
+			componentsMap := make(map[string]string)
+			for _, c := range *bom.Components {
+				componentsMap[c.BOMRef] = c.Name + ":" + c.Version
 			}
-			parts := strings.Split(component, ":")
-			name := parts[0]
-			version := ""
-			if len(parts) > 2 {
-				version = strings.Join(parts[1:], ":")
-			} else if len(parts) == 2 {
-				version = parts[1]
-			}
-			severity := "UNKNOWN"
-			displaySeverity := severity
-			if v.Ratings != nil && len(*v.Ratings) > 0 {
-				for _, r := range *v.Ratings {
-					if r.Severity != "" {
-						severity = strings.ToLower(string(r.Severity))
-						displaySeverity = severity
-						if helper.FailCriteriaSeverityMatchesFilter(severity, parameters.FailCriteria) {
-							displaySeverity = string(r.Severity) + "[!]"
-							failCriteriaCount++
+
+			// Count vulnerabilities that match the fail criteria
+			failCriteriaCount := 0
+
+			for _, v := range *bom.Vulnerabilities {
+				component, ok := componentsMap[v.BOMRef]
+				if !ok {
+					log.Printf("Component not found for vulnerability: %s", v.BOMRef)
+					continue
+				}
+				parts := strings.Split(component, ":")
+				name := parts[0]
+				version := ""
+				if len(parts) > 2 {
+					version = strings.Join(parts[1:], ":")
+				} else if len(parts) == 2 {
+					version = parts[1]
+				}
+				severity := "UNKNOWN"
+				displaySeverity := severity
+				if v.Ratings != nil && len(*v.Ratings) > 0 {
+					for _, r := range *v.Ratings {
+						if r.Severity != "" {
+							severity = strings.ToLower(string(r.Severity))
+							displaySeverity = severity
+							if helper.FailCriteriaSeverityMatchesFilter(severity, parameters.FailCriteria) {
+								displaySeverity = string(r.Severity) + "[!]"
+								failCriteriaCount++
+							}
+							break
 						}
-						break
 					}
 				}
+
+				tbl.AddRow(
+					name,
+					v.ID,
+					version,
+					v.Recommendation,
+					displaySeverity,
+				)
 			}
 
-			tbl.AddRow(
-				name,
-				v.ID,
-				version,
-				v.Recommendation,
-				displaySeverity,
-			)
+			tbl.Print()
+			log.Println()
+			log.Println("========================================")
+			log.Println("         Analysis Result")
+			log.Println("========================================")
+			log.Printf("       Vulnerabilities : %d", len(*bom.Vulnerabilities))
+			log.Printf("Failure Criteria Found : %d", failCriteriaCount)
+			log.Printf("              Duration : %.3f seconds", duration)
+			log.Println("========================================")
+			return failCriteriaCount == 0
 		}
-
-		tbl.Print()
-		log.Println()
-		log.Println("========================================")
-		log.Println("         Analysis Result")
-		log.Println("========================================")
-		log.Printf("       Vulnerabilities : %d", len(*bom.Vulnerabilities))
-		log.Printf("Failure Criteria Found : %d", failCriteriaCount)
-		log.Printf("              Duration : %.3f seconds", duration)
-		log.Println("========================================")
-		return failCriteriaCount == 0
 	case constants.DIGGITY:
 		if bom == nil || bom.Components == nil || len(*bom.Components) == 0 {
 			log.Printf("No Packages Found")
