@@ -103,7 +103,7 @@ func Fatal(arg ...interface{}) {
 
 // Fatalf func prints the formatted arguments to stderr and exits with code 0
 func Fatalf(format string, args ...interface{}) {
-	log.Fatalf(format, args...)
+	log.Printf(format, args...)
 }
 
 // Warn func prints the arguments to stderr

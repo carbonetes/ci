@@ -28,7 +28,7 @@ func versionRun(c *cobra.Command, _ []string) {
 	if format == "json" {
 		output, err := helper.ToJSON(info)
 		if err != nil {
-			log.Fatalf("Error marshalling version info to JSON: %v", err)
+			log.Printf("Error marshalling version info to JSON: %v", err)
 		}
 		log.Infof("%v", string(output))
 		os.Exit(0)

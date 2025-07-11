@@ -21,14 +21,14 @@ func Run(parameters types.Parameters) {
 	// FILE SYSTEM / DIRECTORY
 	case constants.FILE_SYSTEM:
 		if found, _ := helper.IsDirExists(parameters.Input); !found {
-			log.Fatalf("%v: Input path '%s' does not exist or is not a directory.", constants.CI_FAILURE, parameters.Input)
+			log.Printf("%v: Input path '%s' does not exist or is not a directory.", constants.CI_FAILURE, parameters.Input)
 			os.Exit(1)
 		}
 		parameters.Diggity.ScanType = 3
 	// TARBALL / TAR FILE
 	case constants.TARBALL:
 		if found, _ := helper.IsFileExists(parameters.Input); !found {
-			log.Fatalf("%v: Input tar file '%s' does not exists.", constants.CI_FAILURE, parameters.Input)
+			log.Printf("%v: Input tar file '%s' does not exists.", constants.CI_FAILURE, parameters.Input)
 			os.Exit(1)
 		}
 		parameters.Diggity.ScanType = 2
@@ -37,11 +37,11 @@ func Run(parameters types.Parameters) {
 			parameters.Diggity.ScanType = 1
 			parameters.Input = helper.FormatImage(parameters.Input)
 		} else {
-			log.Fatalf("%v: Input path is required for image scan type.", constants.CI_FAILURE)
+			log.Printf("%v: Input path is required for image scan type.", constants.CI_FAILURE)
 			os.Exit(1)
 		}
 	default:
-		log.Fatalf("%v: Unsupported scan type '%s'. Supported scan types are: %v", constants.CI_FAILURE, parameters.ScanType, constants.SUPPORTED_SCAN_TYPES)
+		log.Printf("%v: Unsupported scan type '%s'. Supported scan types are: %v", constants.CI_FAILURE, parameters.ScanType, constants.SUPPORTED_SCAN_TYPES)
 		os.Exit(1)
 	}
 

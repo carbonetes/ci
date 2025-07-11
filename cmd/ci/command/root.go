@@ -44,7 +44,7 @@ func rootCmd(c *cobra.Command, args []string) {
 
 	// # INPUT CHECKING
 	if len(input) == 0 {
-		log.Fatalf("%v: No input provided. Use --input flag to provide an input.", constants.CI_FAILURE)
+		log.Printf("%v: No input provided. Use --input flag to provide an input.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
@@ -54,60 +54,60 @@ func rootCmd(c *cobra.Command, args []string) {
 		case constants.JACKED:
 			// # FAIL CRITERIA FLAG
 			if len(failCriteria) == 0 {
-				log.Fatalf("%v: Fail criteria is supported for jacked analyzer", constants.CI_FAILURE)
+				log.Printf("%v: Fail criteria is supported for jacked analyzer", constants.CI_FAILURE)
 				os.Exit(1)
 			}
 
 			if len(failCriteria) > 0 && !helper.Contains(constants.FAIL_CRITERIA_SEVERITIES[:], failCriteria) {
-				log.Fatalf("%v: Invalid fail criteria %s. Supported criteria are: %v", constants.CI_FAILURE, failCriteria, constants.FAIL_CRITERIA_SEVERITIES)
+				log.Printf("%v: Invalid fail criteria %s. Supported criteria are: %v", constants.CI_FAILURE, failCriteria, constants.FAIL_CRITERIA_SEVERITIES)
 				os.Exit(1)
 			}
 
 		case constants.DIGGITY:
 			if len(failCriteria) > 0 {
-				log.Fatalf("%v: Fail criteria is not supported for diggity analyzer", constants.CI_FAILURE)
+				log.Printf("%v: Fail criteria is not supported for diggity analyzer", constants.CI_FAILURE)
 				os.Exit(1)
 			}
 			if forceDbUpdate {
-				log.Fatalf("%v: Force DB Update is not supported for diggity analyzer", constants.CI_FAILURE)
+				log.Printf("%v: Force DB Update is not supported for diggity analyzer", constants.CI_FAILURE)
 				os.Exit(1)
 			}
 		default:
-			log.Fatalf("%v: No analyzer type %s. Use --analyzer flag to provide an analyzer type. Choose: %v", constants.CI_FAILURE, analyzer, constants.SUPPORTED_ANALYZERS)
+			log.Printf("%v: No analyzer type %s. Use --analyzer flag to provide an analyzer type. Choose: %v", constants.CI_FAILURE, analyzer, constants.SUPPORTED_ANALYZERS)
 			os.Exit(1)
 		}
 	} else {
-		log.Fatalf("%v: No analyzer type %s. Use --analyzer flag to provide an analyzer type. Choose: %v", constants.CI_FAILURE, analyzer, constants.SUPPORTED_ANALYZERS)
+		log.Printf("%v: No analyzer type %s. Use --analyzer flag to provide an analyzer type. Choose: %v", constants.CI_FAILURE, analyzer, constants.SUPPORTED_ANALYZERS)
 		os.Exit(1)
 	}
 
 	// # SCAN TYPE FLAG
 	if len(scanType) == 0 && !helper.Contains(constants.SUPPORTED_SCAN_TYPES[:], scanType) {
-		log.Fatalf("%v: Invalid scan type %s. Supported types are: %v", constants.CI_FAILURE, scanType, constants.SUPPORTED_SCAN_TYPES)
+		log.Printf("%v: Invalid scan type %s. Supported types are: %v", constants.CI_FAILURE, scanType, constants.SUPPORTED_SCAN_TYPES)
 		os.Exit(1)
 	}
 
 	// # API TAGS: TOKEN & PLUGIN TYPE FLAGS
 	if len(token) == 0 {
-		log.Fatalf("%v: No token provided. Use --token flag to provide a token.", constants.CI_FAILURE)
+		log.Printf("%v: No token provided. Use --token flag to provide a token.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 	if len(pluginType) == 0 {
-		log.Fatalf("%v: No plugin type provided. Use --plugin-type flag to provide a plugin type.", constants.CI_FAILURE)
+		log.Printf("%v: No plugin type provided. Use --plugin-type flag to provide a plugin type.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 	if len(pluginType) > 0 && !helper.Contains(constants.SUPPORTED_CICD_PLUGINS[:], pluginType) {
-		log.Fatalf("%v: Invalid plugin type %s. Supported types are: %v", constants.CI_FAILURE, pluginType, constants.SUPPORTED_CICD_PLUGINS)
+		log.Printf("%v: Invalid plugin type %s. Supported types are: %v", constants.CI_FAILURE, pluginType, constants.SUPPORTED_CICD_PLUGINS)
 		os.Exit(1)
 	}
 	// # ENVIRONMENT TYPE FLAG
 	if len(environmentType) == 0 {
-		log.Fatalf("%v: No Environment Type provided. Use --environment-type flag to provide an environment type.", constants.CI_FAILURE)
+		log.Printf("%v: No Environment Type provided. Use --environment-type flag to provide an environment type.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
 	if len(environmentType) > 0 && !helper.Contains(constants.SUPPORTED_ENVIRONMENT_TYPE[:], environmentType) {
-		log.Fatalf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, environmentType, constants.SUPPORTED_ENVIRONMENT_TYPE)
+		log.Printf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, environmentType, constants.SUPPORTED_ENVIRONMENT_TYPE)
 		os.Exit(1)
 	}
 

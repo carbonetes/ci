@@ -35,7 +35,7 @@ func GetAnalysisType(analyzer string) (analysisType int) {
 	case "jacked":
 		analysisType = 1
 	default:
-		log.Fatalf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, analysisType, constants.SUPPORTED_ANALYZERS)
+		log.Printf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, analysisType, constants.SUPPORTED_ANALYZERS)
 		os.Exit(1)
 	}
 	return analysisType

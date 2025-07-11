@@ -34,7 +34,7 @@ func Analyze(parameters types.Parameters) (*cyclonedx.BOM, []diggity.Secret) {
 	case 1: // IMAGE
 		image, ref, err := reader.GetImage(parameters.Input, nil)
 		if err != nil {
-			log.Fatalf("%v: Error reading image '%s': %v", constants.CI_FAILURE, parameters.Input, err)
+			log.Printf("%v: Error reading image '%s': %v", constants.CI_FAILURE, parameters.Input, err)
 			os.Exit(1)
 		}
 
@@ -42,28 +42,28 @@ func Analyze(parameters types.Parameters) (*cyclonedx.BOM, []diggity.Secret) {
 
 		err = reader.ReadFiles(image, addr)
 		if err != nil {
-			log.Fatalf("%v: Error reading files from image '%s': %v", constants.CI_FAILURE, parameters.Input, err)
+			log.Printf("%v: Error reading files from image '%s': %v", constants.CI_FAILURE, parameters.Input, err)
 			os.Exit(1)
 		}
 	case 2: // TARBALL
 		tarball, err := reader.ReadTarball(parameters.Input)
 		if err != nil {
-			log.Fatalf("%v: Error reading tarball '%s': %v", constants.CI_FAILURE, parameters.Input, err)
+			log.Printf("%v: Error reading tarball '%s': %v", constants.CI_FAILURE, parameters.Input, err)
 			os.Exit(1)
 		}
 		err = reader.ReadFiles(tarball, addr)
 		if err != nil {
-			log.Fatalf("%v: Error reading files from tarball '%s': %v", constants.CI_FAILURE, parameters.Input, err)
+			log.Printf("%v: Error reading files from tarball '%s': %v", constants.CI_FAILURE, parameters.Input, err)
 			os.Exit(1)
 		}
 	case 3: // FILESYSTEM
 		err := reader.FilesystemScanHandler(parameters.Input, addr)
 		if err != nil {
-			log.Fatalf("%v: Error reading file system '%s': %v", constants.CI_FAILURE, parameters.Input, err)
+			log.Printf("%v: Error reading file system '%s': %v", constants.CI_FAILURE, parameters.Input, err)
 			os.Exit(1)
 		}
 	default:
-		log.Fatalf("%v: Unsupported scan type '%s'. Supported scan types are: %v", constants.CI_FAILURE, parameters.ScanType, constants.SUPPORTED_SCAN_TYPES)
+		log.Printf("%v: Unsupported scan type '%s'. Supported scan types are: %v", constants.CI_FAILURE, parameters.ScanType, constants.SUPPORTED_SCAN_TYPES)
 		os.Exit(1)
 	}
 

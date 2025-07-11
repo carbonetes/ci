@@ -18,7 +18,7 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 
 	url, err := util.EnvironmentTypeSelector(environmentType)
 	if err != nil {
-		log.Fatalf("%v: Sync: Something went wrong on getting environment type. Please report this issue.", constants.CI_FAILURE)
+		log.Printf("%v: Sync: Something went wrong on getting environment type. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
@@ -28,7 +28,7 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 	if bom != nil {
 		bomBytes, err = json.Marshal(bom)
 		if err != nil {
-			log.Fatalf("%v: Sync: Something went wrong on processing packages. Please report this issue.", constants.CI_FAILURE)
+			log.Printf("%v: Sync: Something went wrong on processing packages. Please report this issue.", constants.CI_FAILURE)
 			os.Exit(1)
 		}
 	}
@@ -36,7 +36,7 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 	if len(secrets) > 0 {
 		secretBytes, err = json.Marshal(secrets)
 		if err != nil {
-			log.Fatalf("%v: Sync: Something went wrong on processing secrets. Please report this issue.", constants.CI_FAILURE)
+			log.Printf("%v: Sync: Something went wrong on processing secrets. Please report this issue.", constants.CI_FAILURE)
 			os.Exit(1)
 		}
 	}
@@ -54,12 +54,12 @@ func SavePluginRepository(bom *cyclonedx.BOM, repoName, pluginName string, start
 
 	var result PluginRepo
 	if err := json.Unmarshal(body, &result); err != nil {
-		log.Fatalf("%v: Sync: Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
+		log.Printf("%v: Sync: Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
 	if resp.StatusCode != 200 {
-		log.Fatalf("%v: Syncing Analysis Result Failed. Please report this issue.", constants.CI_FAILURE)
+		log.Printf("%v: Syncing Analysis Result Failed. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 }

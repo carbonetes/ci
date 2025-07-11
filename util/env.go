@@ -39,7 +39,7 @@ func GetEnvironmentType(environmentType string) (envType int) {
 	case "production":
 		envType = 2
 	default:
-		log.Fatalf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, environmentType, constants.SUPPORTED_ENVIRONMENT_TYPE)
+		log.Printf("%v: Invalid environment type %s. Supported environment types are: %v", constants.CI_FAILURE, environmentType, constants.SUPPORTED_ENVIRONMENT_TYPE)
 		os.Exit(1)
 	}
 	return envType

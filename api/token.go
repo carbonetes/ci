@@ -19,7 +19,7 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 
 	url, err := util.EnvironmentTypeSelector(environmentType)
 	if err != nil {
-		log.Fatalf("%v: Token: Something went wrong on getting environment type. Please report this issue.", constants.CI_FAILURE)
+		log.Printf("%v: Token: Something went wrong on getting environment type. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
@@ -36,16 +36,16 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 	if resp.StatusCode != 200 {
 		var appError ApplicationErrorResponse
 		if err := json.Unmarshal(body, &appError); err != nil {
-			log.Fatalf("%v: Token Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
+			log.Printf("%v: Token Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
 			os.Exit(1)
 		}
-		log.Fatalf("%v: Token: %v", constants.CI_FAILURE, appError.Message)
+		log.Printf("%v: Token: %v", constants.CI_FAILURE, appError.Message)
 		os.Exit(1)
 	}
 	// Unmarshal the body into the struct
 	var result TokenCheckResponse
 	if err := json.Unmarshal(body, &result); err != nil {
-		log.Fatalf("%v: Token: Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
+		log.Printf("%v: Token: Fail to process response body from the selected environment. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
@@ -60,13 +60,13 @@ func PersonalAccessToken(token, pluginType string, environmentType int) {
 	}
 
 	if !permitted {
-		log.Fatalf("%v: Token does not have PIPELINE Write Permission.", constants.CI_FAILURE)
+		log.Printf("%v: Token does not have PIPELINE Write Permission.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
 	tokenId = result.PersonalAccessTokenId
 	if result.PersonalAccessTokenId == "" {
-		log.Fatalf("%v: Token: Something went wrong from getting details. Please report this issue.", constants.CI_FAILURE)
+		log.Printf("%v: Token: Something went wrong from getting details. Please report this issue.", constants.CI_FAILURE)
 		os.Exit(1)
 	}
 
