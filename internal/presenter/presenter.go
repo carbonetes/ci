@@ -24,7 +24,9 @@ func DisplayInput(parameters types.Parameters) {
 	log.Printf("        Skip Fail : %v", displaySkipFailonInput(parameters.SkipFail))
 	if parameters.Analyzer == constants.JACKED {
 		log.Printf("    Fail Criteria : %s", parameters.FailCriteria)
-		log.Printf("  Force DB Update : %v", parameters.ForceDbUpdate)
+		if parameters.ForceDbUpdate {
+			log.Printf("  Force DB Update : %v", parameters.ForceDbUpdate)
+		}
 	}
 	log.Println("========================================")
 	log.Println()

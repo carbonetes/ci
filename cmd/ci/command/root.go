@@ -8,7 +8,6 @@ import (
 	"github.com/carbonetes/ci/internal/constants"
 	"github.com/carbonetes/ci/internal/helper"
 	"github.com/carbonetes/ci/internal/log"
-	"github.com/carbonetes/ci/internal/presenter"
 	"github.com/carbonetes/ci/pkg/types"
 	"github.com/carbonetes/ci/util"
 	"github.com/spf13/cobra"
@@ -49,11 +48,6 @@ func rootCmd(c *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	// ## SKIP FAIL FLAG
-	if skipFail {
-		presenter.DisplaySkipFail()
-	}
-
 	// ## JACKED & DIGGITY FLAGS
 	if len(analyzer) > 0 {
 		switch analyzer {
@@ -72,6 +66,10 @@ func rootCmd(c *cobra.Command, args []string) {
 		case constants.DIGGITY:
 			if len(failCriteria) > 0 {
 				log.Fatalf("%v: Fail criteria is not supported for diggity analyzer", constants.CI_FAILURE)
+				os.Exit(1)
+			}
+			if forceDbUpdate {
+				log.Fatalf("%v: Force DB Update is not supported for diggity analyzer", constants.CI_FAILURE)
 				os.Exit(1)
 			}
 		default:
