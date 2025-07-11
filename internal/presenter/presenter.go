@@ -36,8 +36,13 @@ func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *c
 	switch parameters.Analyzer {
 	case constants.JACKED:
 		if bom == nil || bom.Components == nil || len(*bom.Vulnerabilities) == 0 {
-			log.Printf("No vulnerabilities")
-			log.Printf("Analysis completed in %.3f seconds", duration)
+			log.Println("========================================")
+			log.Println("         Analysis Result")
+			log.Println("========================================")
+			log.Printf("       Vulnerabilities : %d", 0)
+			log.Printf("Failure Criteria Found : %d", 0)
+			log.Printf("              Duration : %.3f seconds", duration)
+			log.Println("========================================")
 			return true
 		} else {
 
