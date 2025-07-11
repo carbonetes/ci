@@ -119,46 +119,34 @@ func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *c
 		tbl.SetHeaders("Package Name", "Type", "Version")
 
 		components := *bom.Components
+		validComponents := make([]cyclonedx.Component, 0)
 
-		for i := 0; i < len(components); {
-			c := components[i]
-			rm := false
+		for _, c := range components {
+			componentType := ""
 
 			if c.Properties != nil {
 				for _, p := range *c.Properties {
-					if p.Name == "diggity:package:type" && p.Value == "" {
-						rm = true
+					if p.Name == "diggity:package:type" {
+						componentType = p.Value
 						break
 					}
 				}
 			}
 
-			// Cut no package types
-			if rm {
-				components = append(components[:i], components[i+1:]...)
-			} else {
-				// Extract componentType (if present and non-empty)
-				componentType := ""
-				if c.Properties != nil {
-					for _, p := range *c.Properties {
-						if p.Name == "diggity:package:type" && p.Value != "" {
-							componentType = p.Value
-							break
-						}
-					}
-				}
-
-				// Add to table
-				tbl.AddRow(
-					c.Name,
-					componentType,
-					c.Version,
-				)
-				i++
+			if componentType == "" {
+				continue
 			}
+
+			validComponents = append(validComponents, c)
+
+			tbl.AddRow(
+				c.Name,
+				componentType,
+				c.Version,
+			)
 		}
 
-		*bom.Components = components
+		*bom.Components = validComponents
 
 		tbl.Print()
 		log.Println()
