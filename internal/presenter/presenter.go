@@ -118,22 +118,47 @@ func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *c
 		tbl := table.NewTable()
 		tbl.SetHeaders("Package Name", "Type", "Version")
 
-		for _, c := range *bom.Components {
-			componentType := ""
+		components := *bom.Components
+
+		for i := 0; i < len(components); {
+			c := components[i]
+			rm := false
+
 			if c.Properties != nil {
 				for _, p := range *c.Properties {
-					if p.Name == "diggity:package:type" && p.Value != "" {
-						componentType = p.Value
+					if p.Name == "diggity:package:type" && p.Value == "" {
+						rm = true
 						break
 					}
 				}
 			}
-			tbl.AddRow(
-				c.Name,
-				componentType,
-				c.Version,
-			)
+
+			// Cut no package types
+			if rm {
+				components = append(components[:i], components[i+1:]...)
+			} else {
+				// Extract componentType (if present and non-empty)
+				componentType := ""
+				if c.Properties != nil {
+					for _, p := range *c.Properties {
+						if p.Name == "diggity:package:type" && p.Value != "" {
+							componentType = p.Value
+							break
+						}
+					}
+				}
+
+				// Add to table
+				tbl.AddRow(
+					c.Name,
+					componentType,
+					c.Version,
+				)
+				i++
+			}
 		}
+
+		*bom.Components = components
 
 		tbl.Print()
 		log.Println()
