@@ -167,7 +167,9 @@ func DisplayAssesstmentOutput(run bool, parameters types.Parameters) {
 }
 
 func DisplaySkipFail() {
-	log.Warnf("%v Skip fail is ENABLED!", constants.CI_WARNING)
+	log.Println()
+	log.Printf("%v Skip fail is ENABLED!", constants.CI_WARNING)
+	log.Println()
 }
 
 func displaySkipFailonInput(skipFail bool) string {
