@@ -35,7 +35,7 @@ func DisplayInput(parameters types.Parameters) {
 func DisplayAnalysisOutput(parameters types.Parameters, duration float64, bom *cyclonedx.BOM, secrets []diggityTypes.Secret) bool {
 	switch parameters.Analyzer {
 	case constants.JACKED:
-		if bom == nil || bom.Components == nil || len(*bom.Vulnerabilities) == 0 {
+		if bom == nil || bom.Components == nil || len(*bom.Components) == 0 || bom.Vulnerabilities == nil {
 			log.Println("========================================")
 			log.Println("         Analysis Result")
 			log.Println("========================================")
